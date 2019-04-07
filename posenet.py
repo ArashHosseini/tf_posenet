@@ -176,7 +176,7 @@ class TestPoseNet:
                 for idx in range(len(poses)):
                     if poses[idx]['score'] > 0.2:
                         color = color_table[idx]
-                        drawKeypoints(poses[idx], orig_image, color)
+                        drawKeypoints(poses[idx], orig_image, color, frame=0, output="/home/")
                         drawSkeleton(poses[idx], orig_image)
                 endtime = time.time()
                 print('Time cost per frame : %f' % (endtime - startime))

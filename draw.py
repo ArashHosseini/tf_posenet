@@ -37,13 +37,26 @@ poseChain = [
 ]
 
 confidence_threshold = 0.1
-def drawKeypoints(body, img, color):
-    for keypoint in body['keypoints']:
+def drawKeypoints(body, img, color, frame=0, output=""):
+    dc = {"people":[]}
+    flat = [0.0 for i in range(36)]
+    for n, keypoint in enumerate(body['keypoints']):
         if keypoint['score'] >= confidence_threshold:
             center = (int(keypoint['position']['x']), int(keypoint['position']['y']))
             radius = 3
             color = color
+            
+            #add x
+            flat[n*2] = keypoint['position']['x']
+            #add y
+            flat[n*2+1] = keypoint['position']['y']
+
             cv2.circle(img, center, radius, color, -1, 8)
+
+    dc["people"].append({"pose_keypoints_2d" : flat})
+    with open(os.path.join(output, '{0}_keypoints.json'.format(str(frame).zfill(12))), 'w') as outfile:
+        json.dump(dc, outfile)
+
     return None
 
 HeaderPart = {'nose', 'leftEye', 'leftEar', 'rightEye', 'rightEar'}
